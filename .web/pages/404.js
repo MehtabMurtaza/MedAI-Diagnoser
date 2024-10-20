@@ -55,16 +55,6 @@ export function Toaster_9d6e054b03c6e5d1bea1c0a5576b4e6d () {
   )
 }
 
-const pulse = keyframes`
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
-`
-
-
 export function Fragment_e521b13e556da291bcec5187a783ea81 () {
   const [addEvents, connectErrors] = useContext(EventLoopContext);
 
@@ -82,6 +72,16 @@ export function Fragment_e521b13e556da291bcec5187a783ea81 () {
 </Fragment>
   )
 }
+
+const pulse = keyframes`
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+`
+
 
 export default function Component() {
   const routeNotFound = useClientSideRouting()

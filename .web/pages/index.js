@@ -15,84 +15,21 @@ import NextHead from "next/head"
 
 
 
-export function Fragment_e521b13e556da291bcec5187a783ea81 () {
-  const [addEvents, connectErrors] = useContext(EventLoopContext);
-
-
-
-  return (
-    <Fragment>
-  {isTrue((connectErrors.length > 0)) ? (
-  <Fragment>
-  <LucideWifiOffIcon css={({ ["color"] : "crimson", ["zIndex"] : 9999, ["position"] : "fixed", ["bottom"] : "33px", ["right"] : "33px", ["animation"] : (pulse+" 1s infinite") })} size={32}/>
-</Fragment>
-) : (
-  <Fragment/>
-)}
-</Fragment>
-  )
-}
-
-export function Button_8cde79d46e54f7b30cee1a2ae591fa76 () {
-  const [addEvents, connectErrors] = useContext(EventLoopContext);
-
-  const on_click_03a6bfdb0b3f385a2e100a53a1891fef = useCallback(((...args) => ((addEvents([(Event("reflex___state____state.cal_hacks_app____cal_hacks_app____state.submit_symptoms", ({  }), ({  })))], args, ({  }))))), [addEvents, Event])
-
-
-  return (
-    <RadixThemesButton onClick={on_click_03a6bfdb0b3f385a2e100a53a1891fef}>
-  {"Submit"}
-</RadixThemesButton>
-  )
-}
-
-                function Fallback({ error, resetErrorBoundary }) {
-                    return (
-                        <div>
-  <p>
-  {"Ooops...Unknown Reflex error has occured:"}
-</p>
-  <p css={({ ["color"] : "red" })}>
-  {error.message}
-</p>
-  <p>
-  {"Please contact the support."}
-</p>
-</div>
-                    );
-                }
-            
-
-export function Textfield__root_67a8e6dd7ca69abd4ad78c6de7597ec5 () {
-  const [addEvents, connectErrors] = useContext(EventLoopContext);
-
-  const on_change_c1999939f05c71b71e9d05fffff0b8a0 = useCallback(((_e) => ((addEvents([(Event("reflex___state____state.cal_hacks_app____cal_hacks_app____state.set_symptoms", ({ ["value"] : _e["target"]["value"] }), ({  })))], [_e], ({  }))))), [addEvents, Event])
-
-
-  return (
-    <RadixThemesTextField.Root onChange={on_change_c1999939f05c71b71e9d05fffff0b8a0} placeholder={"Enter your symptoms here..."}/>
-  )
-}
-
-export function Fragment_4e9fc29dcc3e990f05ac7261dba49a69 () {
+export function Fragment_21ac94d83465ace378501a45adf5ca38 () {
   const reflex___state____state__cal_hacks_app____cal_hacks_app____state = useContext(StateContexts.reflex___state____state__cal_hacks_app____cal_hacks_app____state)
 
 
 
   return (
     <Fragment>
-  {isTrue(!((reflex___state____state__cal_hacks_app____cal_hacks_app____state.diagnosis === ""))) ? (
+  {isTrue(reflex___state____state__cal_hacks_app____cal_hacks_app____state.prompt_for_more) ? (
   <Fragment>
-  <RadixThemesText as={"p"} css={({ ["color"] : "green" })} size={"5"}>
-  {reflex___state____state__cal_hacks_app____cal_hacks_app____state.diagnosis}
+  <RadixThemesText as={"p"} css={({ ["color"] : "blue" })} size={"5"}>
+  {"Please provide more details based on the doctor's request"}
 </RadixThemesText>
 </Fragment>
 ) : (
-  <Fragment>
-  <RadixThemesText as={"p"} css={({ ["color"] : "black" })} size={"5"}>
-  {"No diagnosis available"}
-</RadixThemesText>
-</Fragment>
+  <Fragment/>
 )}
 </Fragment>
   )
@@ -122,6 +59,78 @@ export function Link_3607b2ee649d0f223249459744b7335b () {
   )
 }
 
+export function Fragment_4e9fc29dcc3e990f05ac7261dba49a69 () {
+  const reflex___state____state__cal_hacks_app____cal_hacks_app____state = useContext(StateContexts.reflex___state____state__cal_hacks_app____cal_hacks_app____state)
+
+
+
+  return (
+    <Fragment>
+  {isTrue(!((reflex___state____state__cal_hacks_app____cal_hacks_app____state.diagnosis === ""))) ? (
+  <Fragment>
+  <RadixThemesText as={"p"} css={({ ["color"] : "green" })} size={"5"}>
+  {reflex___state____state__cal_hacks_app____cal_hacks_app____state.diagnosis}
+</RadixThemesText>
+</Fragment>
+) : (
+  <Fragment>
+  <RadixThemesText as={"p"} css={({ ["color"] : "black" })} size={"5"}>
+  {"No diagnosis available"}
+</RadixThemesText>
+</Fragment>
+)}
+</Fragment>
+  )
+}
+
+export function Fragment_e521b13e556da291bcec5187a783ea81 () {
+  const [addEvents, connectErrors] = useContext(EventLoopContext);
+
+
+
+  return (
+    <Fragment>
+  {isTrue((connectErrors.length > 0)) ? (
+  <Fragment>
+  <LucideWifiOffIcon css={({ ["color"] : "crimson", ["zIndex"] : 9999, ["position"] : "fixed", ["bottom"] : "33px", ["right"] : "33px", ["animation"] : (pulse+" 1s infinite") })} size={32}/>
+</Fragment>
+) : (
+  <Fragment/>
+)}
+</Fragment>
+  )
+}
+
+export function Fragment_eb4ad804ee463e78d3c73fc2a2903123 () {
+  const { resolvedColorMode } = useContext(ColorModeContext)
+
+
+
+  return (
+    <Fragment>
+  {isTrue((resolvedColorMode === "light")) ? (
+  <Fragment>
+  <LucideSunIcon css={({ ["color"] : "var(--current-color)" })}/>
+</Fragment>
+) : (
+  <Fragment>
+  <LucideMoonIcon css={({ ["color"] : "var(--current-color)" })}/>
+</Fragment>
+)}
+</Fragment>
+  )
+}
+
+const pulse = keyframes`
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+`
+
+
 export function Iconbutton_52395c54b68ff5a6f498d43b99daaac3 () {
   const { toggleColorMode } = useContext(ColorModeContext)
   const [addEvents, connectErrors] = useContext(EventLoopContext);
@@ -133,18 +142,6 @@ export function Iconbutton_52395c54b68ff5a6f498d43b99daaac3 () {
     <RadixThemesIconButton css={({ ["padding"] : "6px", ["position"] : "fixed", ["top"] : "2rem", ["right"] : "2rem", ["background"] : "transparent", ["color"] : "inherit", ["zIndex"] : "20", ["&:hover"] : ({ ["cursor"] : "pointer" }) })} onClick={on_click_9922dd3e837b9e087c86a2522c2c93f8}>
   <Fragment_eb4ad804ee463e78d3c73fc2a2903123/>
 </RadixThemesIconButton>
-  )
-}
-
-export function Div_24a2e81d0c5d3cb5b5f786fdef44e514 () {
-  const [addEvents, connectErrors] = useContext(EventLoopContext);
-
-
-
-  return (
-    <div css={({ ["position"] : "fixed", ["width"] : "100vw", ["height"] : "0" })} title={("Connection Error: "+((connectErrors.length > 0) ? connectErrors[connectErrors.length - 1].message : ''))}>
-  <Fragment_e521b13e556da291bcec5187a783ea81/>
-</div>
   )
 }
 
@@ -177,33 +174,56 @@ export function Toaster_9d6e054b03c6e5d1bea1c0a5576b4e6d () {
   )
 }
 
-const pulse = keyframes`
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
-`
+export function Button_8cde79d46e54f7b30cee1a2ae591fa76 () {
+  const [addEvents, connectErrors] = useContext(EventLoopContext);
+
+  const on_click_03a6bfdb0b3f385a2e100a53a1891fef = useCallback(((...args) => ((addEvents([(Event("reflex___state____state.cal_hacks_app____cal_hacks_app____state.submit_symptoms", ({  }), ({  })))], args, ({  }))))), [addEvents, Event])
 
 
-export function Fragment_eb4ad804ee463e78d3c73fc2a2903123 () {
-  const { resolvedColorMode } = useContext(ColorModeContext)
+  return (
+    <RadixThemesButton onClick={on_click_03a6bfdb0b3f385a2e100a53a1891fef}>
+  {"Submit"}
+</RadixThemesButton>
+  )
+}
+
+export function Div_24a2e81d0c5d3cb5b5f786fdef44e514 () {
+  const [addEvents, connectErrors] = useContext(EventLoopContext);
 
 
 
   return (
-    <Fragment>
-  {isTrue((resolvedColorMode === "light")) ? (
-  <Fragment>
-  <LucideSunIcon css={({ ["color"] : "var(--current-color)" })}/>
-</Fragment>
-) : (
-  <Fragment>
-  <LucideMoonIcon css={({ ["color"] : "var(--current-color)" })}/>
-</Fragment>
-)}
-</Fragment>
+    <div css={({ ["position"] : "fixed", ["width"] : "100vw", ["height"] : "0" })} title={("Connection Error: "+((connectErrors.length > 0) ? connectErrors[connectErrors.length - 1].message : ''))}>
+  <Fragment_e521b13e556da291bcec5187a783ea81/>
+</div>
+  )
+}
+
+                function Fallback({ error, resetErrorBoundary }) {
+                    return (
+                        <div>
+  <p>
+  {"Ooops...Unknown Reflex error has occured:"}
+</p>
+  <p css={({ ["color"] : "red" })}>
+  {error.message}
+</p>
+  <p>
+  {"Please contact the support."}
+</p>
+</div>
+                    );
+                }
+            
+
+export function Textfield__root_67a8e6dd7ca69abd4ad78c6de7597ec5 () {
+  const [addEvents, connectErrors] = useContext(EventLoopContext);
+
+  const on_change_c1999939f05c71b71e9d05fffff0b8a0 = useCallback(((_e) => ((addEvents([(Event("reflex___state____state.cal_hacks_app____cal_hacks_app____state.set_symptoms", ({ ["value"] : _e["target"]["value"] }), ({  })))], [_e], ({  }))))), [addEvents, Event])
+
+
+  return (
+    <RadixThemesTextField.Root onChange={on_change_c1999939f05c71b71e9d05fffff0b8a0} placeholder={"Enter your symptoms here..."}/>
   )
 }
 
@@ -237,6 +257,7 @@ export default function Component() {
   <Textfield__root_67a8e6dd7ca69abd4ad78c6de7597ec5/>
   <Button_8cde79d46e54f7b30cee1a2ae591fa76/>
   <Fragment_4e9fc29dcc3e990f05ac7261dba49a69/>
+  <Fragment_21ac94d83465ace378501a45adf5ca38/>
 </RadixThemesFlex>
   <RadixThemesFlex css={({ ["display"] : "flex", ["alignItems"] : "center", ["justifyContent"] : "center", ["width"] : "100%" })}>
   <Link_3607b2ee649d0f223249459744b7335b/>

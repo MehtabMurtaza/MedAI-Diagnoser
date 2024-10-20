@@ -171,8 +171,8 @@ async def displayagent_message_handler(ctx: Context, sender: str, msg: Message):
 
 
     
-    
- 
+
+
 bureau = Bureau()
 bureau.add(inputagent)
 bureau.add(questionagent)
