@@ -2,7 +2,7 @@ import reflex as rx
 from rxconfig import config
 
 #common style
-shadow = "rgba(0, 0, 0, 0.15) 0px 2px 8px"
+shadow = "rgba(255, 255, 255, 0.6) 0px 2px 6px"
 chat_margin = "20%"
 message_style = dict(
     padding="1em",
@@ -28,7 +28,11 @@ input_style = dict(
     box_shadow=shadow,
     width="350px",
 )
-button_style = dict(
-    background_color=rx.color("accent", 10),
-    box_shadow=shadow,
-)
+# button_style = dict(
+#     border_radius="1em",
+#     background_image="linear-gradient(144deg,#A9DAED,#8DCAE3)",
+#     box_sizing = "border-box",
+#     color = "white",
+#     opacity = 1,
+#     _hover ={"opacity": 0.5,},
+# )
