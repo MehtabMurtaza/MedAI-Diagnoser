@@ -1,4 +1,33 @@
 from uagents import Agent, Bureau, Context, Model
+
+GROQ_API_KEY = "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"
+import os
+from groq import Groq
+client = Groq(
+    api_key=GROQ_API_KEY,
+)
+# chat_completion = client.chat.completions.create(
+#     messages=[
+#         {
+#             "role": "user",
+#             "content": "What category of diseases are there?",
+#         }
+#     ],
+#     model="llama3-8b-8192",
+# )
+#print(chat_completion.choices[0].message.content)
+
+def askgroq(question):
+    chat_completion = client.chat.completions.create(
+        messages=[
+            {
+                "role": "user",
+                "content": question,
+            }
+        ],
+        model="llama3-8b-8192",
+    )
+    return(chat_completion.choices[0].message.content)
  
 class Message(Model):
     message: str
@@ -9,7 +38,8 @@ webscrapeagent = Agent(
     mailbox="c23aaa14-7320-4283-a2df-fd1a013c03da",
     seed = "asdfhadflgwlirebfadswlerjhbf"
 )
-finalagent = Agent(name="finalagent", seed="finalagent")
+recommendationagent = Agent(name="recommendationagent", seed="recommendationagent")
+displayagent = Agent(name="displayagent", seed="displayagent")
 #@sigmar.on_interval(period=3.0)
 @inputagent.on_event("startup")
 async def send_message(ctx: Context):
@@ -23,7 +53,10 @@ async def inputagent_message_handler(ctx: Context, sender: str, msg: Message):
 
     ctx.logger.info(f"Received message from {sender}: {msg.message}") #message is new question
 
-#display question, wait for new input
+    #display question, wait for new input
+
+    #get new input 
+
     newinput = "uhhhhhh"
 
     await ctx.send(questionagent.address, Message(message=newinput))
@@ -32,6 +65,13 @@ async def inputagent_message_handler(ctx: Context, sender: str, msg: Message):
 async def questionagent_message_handler(ctx: Context, sender: str, msg: Message):
 
     ctx.logger.info(f"Received message from {sender}: {msg.message}") #message is user input
+
+    question = "given these symptoms, what other information would you need to diagnose this patient with 95 percent confidence? If you're not confident, output the word uhh "
+    #words = input()
+    question = question
+
+    answer = askgroq(question)
+
 #gets answer to prev question
     sure = True
     #pass answer to groq
@@ -42,13 +82,13 @@ async def questionagent_message_handler(ctx: Context, sender: str, msg: Message)
 
     if not sure:
 
-        question = "riddle me this"
+        question = answer
 
         await ctx.send(inputagent.address, Message(message=question)) #sends question to input agent
     
     else:
 
-        diagnosis = "YOURE GONNA DIE"
+        diagnosis = answer
 
         # use groq to find a reputable website that can be web scraped?
 
@@ -89,17 +129,18 @@ async def questionagent_message_handler(ctx: Context, sender: str, msg: Message)
 async def handle_response(ctx: Context, sender: str, msg: WebsiteScraperResponse):
     ctx.logger.info(f"Received response from {sender[-10:]}:")
     ctx.logger.info(msg.text)
+    
     #synthesize msg.text
 
     #with groq
 
     synthesis = "fewworddotrick"
 
-    await ctx.send(finalagent.address, Message(message=synthesis)) #send recommendation to finalagent
+    await ctx.send(recommendationagent.address, Message(message=synthesis)) #send synthesis to recommendationagent
 
 
-@finalagent.on_message(model=Message)
-async def finalagent_message_handler(ctx: Context, sender: str, msg: Message):
+@recommendationagent.on_message(model=Message)
+async def recommendationagent_message_handler(ctx: Context, sender: str, msg: Message):
 
     ctx.logger.info(f"Received message from {sender}: {msg.message}") #message is synthesis
 
@@ -107,9 +148,21 @@ async def finalagent_message_handler(ctx: Context, sender: str, msg: Message):
 
     recommendation = "kys"
 
-    print(recommendation)
+    await ctx.send(displayagent.address, Message(message=recommendation)) #send recommendation to displayagent
 
-    #display recommendation, next steps!!
+@displayagent.on_message(model=Message)
+async def displayagent_message_handler(ctx: Context, sender: str, msg: Message):
+
+    ctx.logger.info(f"Received message from {sender}: {msg.message}") #message is recommendation
+
+    #use llama to ensure safe display
+
+    display = "DONT kys"
+
+    print("finaldisplay", display)
+
+    #send back to ui
+
 
 
 
@@ -122,7 +175,7 @@ bureau = Bureau()
 bureau.add(inputagent)
 bureau.add(questionagent)
 bureau.add(webscrapeagent)
-bureau.add(finalagent)
+bureau.add(recommendationagent)
  
 if __name__ == "__main__":
     bureau.run()
