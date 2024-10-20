@@ -97,7 +97,7 @@ def q_ans(question: str, answer: str) -> rx.Component:
     )
 
 def heading() -> rx.Component:
-    return rx.heading("Hello! This is MedAI", size = "7", margin="15px",
+    return rx.heading("Hello! This is Pocketdoc!", size = "7", margin="15px",
                       style={
                           "position":"fixed",
                           "top":"0",
@@ -121,6 +121,8 @@ def chat() -> rx.Component:
             "marginBottom":"130px",
             "padding":"15",
             "backgroundColor":bg_color,
+            'height':'100vh'
+
         },
     )
     
@@ -128,7 +130,6 @@ def message_bar() -> rx.Component:
     return rx.hstack(
         rx.input(placeholder="What are you feeling?",
                  border_width="0px",
-                 padding="1em",
                  width="350px",
                  value=State.symptoms,
                  on_change=State.set_symptoms),
@@ -145,7 +146,7 @@ def message_bar() -> rx.Component:
             "position":"fixed",
             "bottom":"0",
             "marginBottom": "110px",
-            #"backgroundColor":bg_color,
+            "backgroundColor":bg_color,
         },
 
     )
@@ -157,7 +158,7 @@ def disclaimer() -> rx.Component:
                        "position":"fixed",
                         "bottom":"0",
                         "marginBottom": "52px",
-                        #"backgroundColor":bg_color,
+                        "backgroundColor":bg_color,
                    },)
 
 def logo() -> rx.Component:
@@ -165,7 +166,7 @@ def logo() -> rx.Component:
         style={
             "position":"fixed",
             "bottom":"0",
-            #"backgroundColor":bg_color,
+            "backgroundColor":bg_color,
         },
     )
 
@@ -179,13 +180,17 @@ def index() -> rx.Component:
             disclaimer(),
             logo(),
             align="center",
+            background_color=bg_color,
         ),
-        style={
-            "backgroundColor":bg_color,
-        },
+        background_color=bg_color,
+        # style={
+        #     "backgroundColor":bg_color,
+        # },
     )
 
-app = rx.App()
+app = rx.App(theme=rx.theme(
+    accent_color="sky",
+))
 app.add_page(index)
 
 
