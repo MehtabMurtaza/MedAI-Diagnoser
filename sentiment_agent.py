@@ -1,5 +1,4 @@
 from uagents import Agent, Context, Model
-from uagents.setup import fund_agent_if_low
 
 
 class WebsiteScraperRequest(Model):
@@ -10,12 +9,17 @@ class WebsiteScraperResponse(Model):
     text: str
 
 
-agent = Agent()
+agent = Agent(
+    mailbox="c23aaa14-7320-4283-a2df-fd1a013c03da",
+    seed = "asdfhadflgwlirebfadswlerjhbf"
+)
 
-fund_agent_if_low(agent.wallet.address())
+
 AI_AGENT_ADDRESS = "agent1qwnjmzwwdq9rjs30y3qw988htrvte6lk2xaak9xg4kz0fsdz0t9ws4mwsgs"
 
 website_url = "https://fetch.ai/"
+
+print(agent.address)
 
 
 @agent.on_event("startup")
@@ -32,5 +36,3 @@ async def handle_response(ctx: Context, sender: str, msg: WebsiteScraperResponse
 
 if __name__ == "__main__":
     agent.run()
-
-
