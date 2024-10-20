@@ -176,6 +176,7 @@ bureau.add(inputagent)
 bureau.add(questionagent)
 bureau.add(webscrapeagent)
 bureau.add(recommendationagent)
+bureau.add(displayagent)
  
 if __name__ == "__main__":
     bureau.run()
