@@ -1,4 +1,5 @@
 from uagents import Agent, Bureau, Context, Model
+from urllib.parse import quote_plus
 
 GROQ_API_KEY = "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"
 import os
@@ -25,18 +26,21 @@ def askgroq(question, history):
     
     return chat_completion.choices[0].message.content
 
+# Fresh instance of Groq for summarizing web-scraped data
+def summarize_data(data):
+    chat_completion = client.chat.completions.create(
+        messages=[
+            {"role": "system", "content": "Summarize the following medical information, Make sure to keep the summary very short and very simple so that people with little knowledge can understand it:"},
+            {"role": "user", "content": data}
+        ],
+        model="llama-3.1-70b-versatile",
+    )
+    return chat_completion.choices[0].message.content
 
-# def askgroq(question):
-#     chat_completion = client.chat.completions.create(
-#         messages=[
-#             {
-#                 "role": "user",
-#                 "content": question,
-#             }
-#         ],
-#         model="llama3-8b-8192",
-#     )
-#     return(chat_completion.choices[0].message.content)
+# Generate a dynamic Google search URL
+def generate_google_search_url(query):
+    search_query = quote_plus(query)
+    return f"https://www.google.com/search?q={search_query}"
  
 class Message(Model):
     message: str
@@ -54,11 +58,6 @@ displayagent = Agent(name="displayagent", seed="displayagent")
 @inputagent.on_event("startup")
 async def send_message(ctx: Context):
 
-   
-#    input = "whateva"
-
-#    await ctx.send(questionagent.address, Message(message=input))
-
     initial_input = "Initial input from user. Here the user inputs the symptoms"
     # Adding initial user input to history
     text_history.append({"sender": "user", "content": initial_input})
@@ -68,16 +67,6 @@ async def send_message(ctx: Context):
  
 @inputagent.on_message(model=Message)
 async def inputagent_message_handler(ctx: Context, sender: str, msg: Message):
-
-    # ctx.logger.info(f"Received message from {sender}: {msg.message}") #message is new question
-
-    # #display question, wait for new input
-
-    # #get new input 
-
-    # newinput = "uhhhhhh"
-
-    # await ctx.send(questionagent.address, Message(message=newinput))
 
     ctx.logger.info(f"Received message from {sender}: {msg.message}")
 
@@ -106,7 +95,7 @@ async def questionagent_message_handler(ctx: Context, sender: str, msg: Message)
     text_history.append({"sender": "assistant", "content": answer})
 
     # Determine whether the model is satisfied or needs more input
-    sure = "Uhh" not in answer  # if 'uhh' is present, we are not sure
+    sure = "uhh" not in answer.lower()  # if 'uhh' is present (case insensitive), we are not sure
 
     if not sure:
         # Send the next question to input agent for user input
@@ -115,42 +104,10 @@ async def questionagent_message_handler(ctx: Context, sender: str, msg: Message)
         # If satisfied, this would be the final diagnosis
         diagnosis = answer
         ctx.logger.info(f"Diagnosis reached: {diagnosis}")
+
         website = "website.com"
+
         await ctx.send(webscrapeagent.address, Message(message=website))
-
-
-#     ctx.logger.info(f"Received message from {sender}: {msg.message}") #message is user input
-
-#     question = "given these symptoms, what other information would you need to diagnose this patient with 95 percent confidence? If you're not confident, output the word uhh "
-#     #words = input()
-#     question = question
-
-#     answer = askgroq(question)
-
-# #gets answer to prev question
-#     sure = True
-#     #pass answer to groq
-#     print("hi")
-#     #change sure boolean if sure
-#     #update quesiton if new question
-#     #update diagnosis if sure
-
-#     if not sure:
-
-#         question = answer
-
-#         await ctx.send(inputagent.address, Message(message=question)) #sends question to input agent
-    
-#     else:
-
-#         diagnosis = answer
-
-#         # use groq to find a reputable website that can be web scraped?
-
-#         website = "website.com"
-
-#         await ctx.send(webscrapeagent.address, Message(message=website)) #sends website to website scraper
-
 
 
 #web scraper
@@ -170,79 +127,49 @@ website_url = "https://en.wikipedia.org/wiki/Atopic_dermatitis"
 
 
 @webscrapeagent.on_message(model=Message)
-async def questionagent_message_handler(ctx: Context, sender: str, msg: Message):
+async def webscrapergent_message_handler(ctx: Context, sender: str, msg: Message):
 
     ctx.logger.info(f"Received message from {sender}: {msg.message}")
 
     #website_url = msg.message
 
     await ctx.send(AI_AGENT_ADDRESS, WebsiteScraperRequest(url=website_url))
-    ctx.logger.info(f"Sent request for scraping the Website: {website_url}")
+    #ctx.logger.info(f"Sent request for scraping the Website: {website_url}")
 
 
 @webscrapeagent.on_message(WebsiteScraperResponse)
 async def handle_response(ctx: Context, sender: str, msg: WebsiteScraperResponse):
+    #ctx.logger.info(f"Received response from {sender[-10:]}: {msg.text}")
 
-    ctx.logger.info(f"Received response from {sender[-10:]}: {msg.text}")
+    # Summarize the scraped website data
+    summarized_data = summarize_data(msg.text)
 
-    # Adding the web scraping content to history (optional)
-    text_history.append({"sender": "assistant", "content": msg.text})
+    # Log the summarized data (optional)
+    #ctx.logger.info(f"Summarized data: {summarized_data}")
 
-    synthesis = "Synthesis of website data."
-    await ctx.send(recommendationagent.address, Message(message=synthesis))
-
-    # ctx.logger.info(f"Received response from {sender[-10:]}:")
-    # ctx.logger.info(msg.text)
-    
-    # #synthesize msg.text
-
-    # #with groq
-
-    # synthesis = "fewworddotrick"
-
-    # await ctx.send(recommendationagent.address, Message(message=synthesis)) #send synthesis to recommendationagent
+    # Send the summarized data to the recommendation agent for further processing
+    await ctx.send(recommendationagent.address, Message(message=summarized_data))
 
 
 @recommendationagent.on_message(model=Message)
 async def recommendationagent_message_handler(ctx: Context, sender: str, msg: Message):
 
-    ctx.logger.info(f"Received message from {sender}: {msg.message}")
+    # Process the summarized data to form a recommendation
+    recommendation = f"Based on the summarized data: {msg.message}, here is the final recommendation and diagnosis."
 
-    #use synthesis with groq to make recommendation
-    
-    recommendation = "Final diagnosis and recommendation."
+    # Send the recommendation to the display agent
     await ctx.send(displayagent.address, Message(message=recommendation))
 
-    # ctx.logger.info(f"Received message from {sender}: {msg.message}") #message is synthesis
-
-    # #use synthesis with groq to make recommendation
-
-    # recommendation = "kys"
-
-    # await ctx.send(displayagent.address, Message(message=recommendation)) #send recommendation to displayagent
 
 @displayagent.on_message(model=Message)
 async def displayagent_message_handler(ctx: Context, sender: str, msg: Message):
+    ctx.logger.info(f"Received final recommendation for display: {msg.message}")
 
-    ctx.logger.info(f"Received message from {sender}: {msg.message}") #message is recommendation
-
-    #use llama to ensure safe display
-
-    # display = "DONT kys"
-
-    # print("finaldisplay", display)
-
-    # Final display logic
     display = msg.message  # Ensure safe display
-    print("Final Display:", display)
-
-    #send back to ui
 
 
 
 
-#if __name__ == "__main__":
-#    webscrapeagent.run()
     
     
  
