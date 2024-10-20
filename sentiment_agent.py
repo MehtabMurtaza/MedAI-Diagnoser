@@ -17,7 +17,7 @@ agent = Agent(
 
 AI_AGENT_ADDRESS = "agent1qwnjmzwwdq9rjs30y3qw988htrvte6lk2xaak9xg4kz0fsdz0t9ws4mwsgs"
 
-website_url = "https://fetch.ai/"
+website_url = "https://en.wikipedia.org/wiki/Atopic_dermatitis"
 
 print(agent.address)
 
