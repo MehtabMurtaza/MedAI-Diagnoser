@@ -79,26 +79,41 @@ class State(rx.State):
 def index() -> rx.Component:
     # Welcome Page (Index)
     return rx.container(
+        
+
         rx.color_mode.button(position="top-right"),
+
         rx.vstack(
             rx.heading("Get your diagnosis!", size="9"),
             rx.text("Please input your symptoms", size="5"),
             # Add a textbox for user input, binding it to the symptoms state
             rx.input(placeholder="Enter your symptoms here...", on_change=State.set_symptoms),
             # Add a button that will submit the symptoms and trigger the API call
-            rx.button("Submit", on_click=State.submit_symptoms),
+            rx.button(
+                "Submit",
+                border_radius="1em",
+                background_image="linear-gradient(144deg,#AF40FF,#5B42F3 50%,#00DDEB)",
+                box_sizing = "border-box",
+                color = "white",
+                opacity = 1,
+                _hover ={"opacity": 0.5,},
+                on_click=State.submit_symptoms),
             # Display the diagnosis after the API response
             rx.cond(
                 State.diagnosis != "",  # If diagnosis is available
-                rx.text(State.diagnosis, size="5", color="green"),
-                rx.text("No diagnosis available", size="5", color="black")
+                rx.text(State.diagnosis, size="5", color="var(--black-10)"),
+                rx.text("No diagnosis available", size="5", color="black"),
             ),
+
             spacing="5",
             justify="center",
             min_height="85vh",
+            width="100%",
+            background_color="var(--mint-1)",
+
         ),
         rx.logo(),
-    )
+        )
 
 app = rx.App()
 app.add_page(index)
